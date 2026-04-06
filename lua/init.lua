@@ -15,16 +15,20 @@ M.setup = function(user_config)
 			return
 		end
 
+		local full_path
 		local input = opts.args
 		if not (input:match("%.md") or input:match("%.txt")) then
-			input = opts.args .. ".md"
+			if input == "" then
+				input = vim.fn.strftime("%d.%m.%y")
+			end
+			input = input .. ".md"
 		end
 
-		local full_path = user_config.notes_path .. input
+		full_path = user_config.notes_path .. input
 		--vim.cmd.edit(full_path) also exists
 		vim.cmd("edit " .. full_path)
 	end, {
-		nargs = 1,
+		nargs = "?",
 		--NOTE: needed for autocomplete
 		complete = function(ArgLead, CmdLine, CursorPos)
 			local files = vim.fn.readdir(user_config.notes_path)
