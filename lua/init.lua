@@ -15,7 +15,6 @@ M.setup = function(user_config)
 			return
 		end
 
-		local full_path
 		local input = opts.args
 		if not (input:match("%.md") or input:match("%.txt")) then
 			if input == "" then
@@ -24,7 +23,11 @@ M.setup = function(user_config)
 			input = input .. ".md"
 		end
 
-		full_path = user_config.notes_path .. input
+		if not (string.sub(user_config.notes_path, -1) == "/") then
+			user_config.notes_path = user_config.notes_path .. "/"
+		end
+
+		local full_path = user_config.notes_path .. input
 		--vim.cmd.edit(full_path) also exists
 		vim.cmd("edit " .. full_path)
 	end, {
